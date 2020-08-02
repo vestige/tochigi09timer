@@ -1,0 +1,104 @@
+vestige@vestige spike_driq % gem install driq
+Fetching driq-0.4.2.gem
+Successfully installed driq-0.4.2
+Parsing documentation for driq-0.4.2
+Installing ri documentation for driq-0.4.2
+Done installing documentation for driq after 0 seconds
+1 gem installed
+vestige@vestige spike_driq % get enviroment
+zsh: command not found: get
+vestige@vestige spike_driq % gem enviroment
+ERROR:  While executing gem ... (Gem::CommandLineError)
+    Unknown command enviroment
+vestige@vestige spike_driq % gem environment
+RubyGems Environment:
+  - RUBYGEMS VERSION: 3.1.2
+  - RUBY VERSION: 2.7.0 (2019-12-25 patchlevel 0) [x86_64-darwin19]
+  - INSTALLATION DIRECTORY: /Users/vestige/.rbenv/versions/2.7.0/lib/ruby/gems/2.7.0
+  - USER INSTALLATION DIRECTORY: /Users/vestige/.gem/ruby/2.7.0
+  - RUBY EXECUTABLE: /Users/vestige/.rbenv/versions/2.7.0/bin/ruby
+  - GIT EXECUTABLE: /usr/bin/git
+  - EXECUTABLE DIRECTORY: /Users/vestige/.rbenv/versions/2.7.0/bin
+  - SPEC CACHE DIRECTORY: /Users/vestige/.gem/specs
+  - SYSTEM CONFIGURATION DIRECTORY: /Users/vestige/.rbenv/versions/2.7.0/etc
+  - RUBYGEMS PLATFORMS:
+    - ruby
+    - x86_64-darwin-19
+  - GEM PATHS:
+     - /Users/vestige/.rbenv/versions/2.7.0/lib/ruby/gems/2.7.0
+     - /Users/vestige/.gem/ruby/2.7.0
+  - GEM CONFIGURATION:
+     - :update_sources => true
+     - :verbose => true
+     - :backtrace => false
+     - :bulk_threshold => 1000
+  - REMOTE SOURCES:
+vestige@vestige spike_driq % irb -r drb --simple-prompt
+>> ro = DRbObject.new_with_uri "druby://localhost:54321"
+>> ro.keys
+=> ["src", "webrick", "body"]
+>> puts ro['body']
+<!DOCTYPE html>
+    <title>SSE</title>
+  </head>
+  <body>
+    <h1>It Works!</h1>
+    <ul id="list">
+    </ul>
+  </body>
+  var evt = new EventSource('/stream');
+  evt.onmessage = function(e) {
+    var newElement = document.createElement("li");
+    var eventList = document.getElementById('list');
+  
+    newElement.innerHTML = "message: " + e.data;
+    eventList.appendChild(newElement);
+  };
+</html>
+=> nil
+>> ro.keys
+=> ["src", "webrick", "body"]
+>> ro["body"]
+=> "<!DOCTYPE html>\n<html>\n  <head>\n    <title>SSE</title>\n  </head>\n  <body>\n    <h1>It Works!</h1>\n    <ul id=\"list\">\n    </ul>\n  </body>\n  <script>\n  var evt = new EventSource('/stream');\n  evt.onmessage = function(e) {\n    var newElement = document.createElement(\"li\");\n    var eventList = document.getElementById('list');\n  \n    newElement.innerHTML = \"message: \" + e.data;\n    eventList.appendChild(newElement);\n  };\n  </script>\n</html>\n"
+>> ro['src']
+=> #<DRb::DRbObject:0x00007fe98f916e98 @uri="druby://localhost:54321", @ref=700>
+>> ro['src'].write "hello"
+=> 1595337356694249
+>> ro["body"]="aaaa"
+>> ro['src'].write "hello"
+=> 1595337467227716
+>> ro["body"]="<!DOCTYPE html>\n<html>\n  <head>\n    <title>SSE</title>\n  </head>\n  <body>\n    <h1>It Works!</h1>\n    <ul id=\
+list\">\n    </ul>\n  </body>\n  <script>\n  var evt = new EventSource('/stream');\n  evt.onmessage = function(e) {\n    var newEle
+ent = document.createElement(\"li\");\n    var eventList = document.getElementById('list');\n  \n    newElement.innerHTML = \"messa
+e: \" + e.data;\n    eventList.appendChild(newElement);\n  };\n  </script>\n</html>\n"
+>> it = ro["body"]
+>> puts it
+<!DOCTYPE html>
+  </head>
+    <h1>It Works!</h1>
+  </body>
+  <script>
+  var evt = new EventSource('/stream');
+  evt.onmessage = function(e) {
+    var newElement = document.createElement("li");
+    var eventList = document.getElementById('list');
+  
+    newElement.innerHTML = "message: " + e.data;
+    eventList.appendChild(newElement);
+  };
+  </script>
+</html>
+=> nil
+>> it['It Works!'] = 'Dont'
+>> ro['body'] = it
+>> ro['src'].write({:city => "Nasushiobara", :temp_low => -2.0 })
+=> 1595337788559617
+>> ro['src'].write "<h1>hello</h1>"
+=> 1595337843784060
+>> it['innerHTML'] = 'textContent'
+>> ro['body'] = it
+>> 
+
+
+---
+ http://localhost:8000
