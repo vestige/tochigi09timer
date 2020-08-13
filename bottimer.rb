@@ -3,15 +3,26 @@ require 'discordrb'
 bot = Discordrb::Bot.new token: 'Token'
 def countDown(event)
   start = Time.now
-  unit = 1
-  count = 10
+  count = 20
+  prev = 0
   loop do
-    
-    event.respond "#{} s" if Time.now - start > unit
-    break if Time.now - start > count
-    sleep 0.05
+      past = Time.now - start
+      unit = calcUnit(count - past)
+      fwd = past.div unit
+
+      if fwd > prev
+          event.respond "#{past}"
+          prev = fwd
+      end
+
+      break if past > count
+      sleep 0.05
   end
-  #event.respond "#{remain} s"
+end 
+
+def calcUnit(remainTime)
+  return 5 if remainTime > 10
+  return 2 if remainTime <= 10
 end
 
 bot.message(with_text: 'start') do |event|
@@ -25,16 +36,4 @@ bot.message(with_text: 'start') do |event|
 end
 
 bot.run
-
-
-
-#start 
-
-#set
-#start
-#stop
-#reset
-
-
-
 
