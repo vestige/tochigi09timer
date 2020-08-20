@@ -1,7 +1,15 @@
+def setTime(total)
+    @total = total
+end
+
+def count()
+    @total ||= 10
+end
+
 def countDown()
     start = Time.now
     p start
-    count = 20
+    p count
     prev = 0
     loop do
         past = Time.now - start
@@ -9,8 +17,8 @@ def countDown()
         fwd = past.div unit
  
         if fwd > prev
-            puts "#{count - fwd * unit}" 
             p Time.now
+            puts "#{count - fwd * unit}" 
             prev = fwd
         end
 
@@ -18,7 +26,6 @@ def countDown()
         sleep 0.05
     end
 end
-
 
 #20秒カウントダウンします
 #10秒までは5秒おき
@@ -29,4 +36,6 @@ def calcUnit(remainTime)
     return 1 if remainTime <= 10
 end
 
+setTime(15)
 countDown()
+p "888888"
