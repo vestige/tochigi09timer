@@ -18,7 +18,10 @@ def countDown()
  
         if fwd > prev
             p Time.now
-            puts "#{count - fwd * unit}" 
+            it = count - fwd * unit
+            disp = Time.at(it).utc.strftime('%M:%S')
+            puts "#{it}"
+            puts "#{disp}" 
             prev = fwd
         end
 
@@ -32,10 +35,11 @@ end
 #10秒からは1秒おき
 
 def calcUnit(remainTime)
-    return 5 if remainTime > 10
-    return 1 if remainTime <= 10
+    return 30 if (61..nil).include? remainTime.to_i
+    return 10 if (11..60).include? remainTime.to_i
+    return 2 if (nil..10).include? remainTime.to_i
 end
 
-setTime(15)
+setTime(180)
 countDown()
 p "888888"
