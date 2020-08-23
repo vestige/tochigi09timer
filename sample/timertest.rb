@@ -2,32 +2,34 @@ def setTime(total)
     @total = total
 end
 
-def count()
+def total()
     @total ||= 10
 end
 
 def countDown()
     start = Time.now
     p start
-    p count
-    prev = 0
+    p total
+    @prev = 0
     loop do
         past = Time.now - start
-        unit = calcUnit(count - past)
-        fwd = past.div unit
- 
-        if fwd > prev
-            p Time.now
-            it = count - fwd * unit
-            disp = Time.at(it).utc.strftime('%M:%S')
-            puts "#{it}"
-            puts "#{disp}" 
-            prev = fwd
-        end
-
-        break if past > count
+        break if past > total
+        it = total - past
+        next if (!canDisplay(it))
+        t = Time.at(it).utc.strftime('%M:%S')
+        @prev = it
+        puts "#{t}"
         sleep 0.05
     end
+end
+
+def canDisplay(remain)
+    diff = @prev - remain
+    return false if (diff.to_i == 0) 
+ 
+    unit = calcUnit(remain)
+    rem = (remain % unit).to_i
+    return (rem == 0)
 end
 
 #20秒カウントダウンします
@@ -40,6 +42,6 @@ def calcUnit(remainTime)
     return 2 if (nil..10).include? remainTime.to_i
 end
 
-setTime(180)
+setTime(13)
 countDown()
 p "888888"
