@@ -16,7 +16,7 @@ def prevTime()
   @prev ||= 0
 end
 
-bot = Discordrb::Bot.new token: ''
+bot = Discordrb::Bot.new token: ENV['DISCODE']
 def countDown(event)
   event.respond "#{Time.at(totalTime).utc.strftime('%M:%S')}"
 

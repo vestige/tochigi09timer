@@ -38,6 +38,9 @@ def calcUnit(remainTime)
     return 2 if (nil..10).include? remainTime.to_i
 end
 
+
+p ENV['DISCODE']
+
 setTime(13)
 countDown()
 p "888888"
