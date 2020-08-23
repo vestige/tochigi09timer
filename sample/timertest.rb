@@ -7,9 +7,9 @@ def total()
 end
 
 def countDown()
+    puts "#{Time.at(total).utc.strftime('%M:%S')}"
+
     start = Time.now
-    p start
-    p total
     @prev = 0
     loop do
         past = Time.now - start
@@ -31,10 +31,6 @@ def canDisplay(remain)
     rem = (remain % unit).to_i
     return (rem == 0)
 end
-
-#20秒カウントダウンします
-#10秒までは5秒おき
-#10秒からは1秒おき
 
 def calcUnit(remainTime)
     return 30 if (61..nil).include? remainTime.to_i
