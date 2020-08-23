@@ -8,7 +8,7 @@ def totalTime()
   @total ||= 10
 end
 
-bot = Discordrb::Bot.new token: 'NzM5MzYwNjE2ODIwNzY4ODE5.XyZVOw.klylYiDroPKJ8UZLKyjzQ-yIU2A'
+bot = Discordrb::Bot.new token: ''
 def countDown(event)
   start = Time.now
   prev = 0
