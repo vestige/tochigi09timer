@@ -21,7 +21,7 @@ def setStopFlg(enable)
 end
 
 def stopFlg()
-  @stop ||= false
+  @stop
 end
 
 bot = Discordrb::Bot.new token: ENV['DISCODE']
@@ -80,15 +80,19 @@ bot.message(with_text: 'stop') do |event|
 end
 
 bot.message(with_text: 'start') do |event|
+  return unless stopFlg
+
   event.respond 'Timer Start!'
   event.respond "#{Time.now}"
 
   setStopFlg(false)
   countDown(event)
+  setStopFlg(true)
  
-  event.respond 'Timer End'
+  event.respond 'Timer End 888888'
   event.respond "#{Time.now}"
 end
 
+setStopFlg(true)
 bot.run
 
