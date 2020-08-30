@@ -16,12 +16,23 @@ def prevTime()
   @prev ||= 0
 end
 
+def setStopFlg(enable)
+  @stop = enable
+end
+
+def stopFlg()
+  @stop ||= false
+end
+
 bot = Discordrb::Bot.new token: ENV['DISCODE']
 def countDown(event)
+
   event.respond "#{Time.at(totalTime).utc.strftime('%M:%S')}"
 
   start = Time.now
   loop do
+      break if stopFlg
+
       past = Time.now - start
       break if past > totalTime
       it = totalTime - past
@@ -63,11 +74,17 @@ bot.message(with_text: 'set30') do |event|
   event.respond '30分 Setしました'
 end
 
+bot.message(with_text: 'stop') do |event|
+  event.respond 'やめー'
+  setStopFlg(true)
+end
+
 bot.message(with_text: 'start') do |event|
   event.respond 'Timer Start!'
   event.respond "#{Time.now}"
 
-  countDown(event);
+  setStopFlg(false)
+  countDown(event)
  
   event.respond 'Timer End'
   event.respond "#{Time.now}"
